@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Fichas de Poker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #34495e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 25px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tabs button {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .tabs button:hover, .tabs button.active {
+            background-color: #4CAF50;
+        }
+        .tabcontent {
+            display: none;
+        }
+        .tabcontent.active {
+            display: block;
+        }
+        .chip-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .chip {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #333;
+            transition: transform 0.3s ease;
+            animation: pulse 1.5s infinite;
+        }
+        .chip:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .white { background-color: #ffffff; }
+        .green { background-color: #27ae60; color: #fff; }
+        .blue { background-color: #3498db; color: #fff; }
+        .black { background-color: #2c3e50; color: #fff; }
+        .red { background-color: #e74c3c; color: #fff; }
+        label {
+            flex: 1;
+            color: #bdc3c7;
+        }
+        input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #7f8c8d;
+            border-radius: 4px;
+            background-color: #ecf0f1;
+            color: #333;
+            text-align: center;
+        }
+        button.reset {
+            width: 100%;
+            padding: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button.reset:hover {
+            background-color: #c0392b;
+        }
+        #resultado {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #f1c40f;
+        }
+        #poker-hands {
+            text-align: center;
+        }
+        #poker-hands img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .chip-input {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .chip {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Calculadora de Fichas de Poker</h1>
+    <div class="tabs">
+        <button class="active" onclick="openTab('calc')">Calculadora</button>
+        <button onclick="openTab('hands')">Mãos de Poker</button>
+    </div>
+    <div id="calc" class="tabcontent active">
+        <div class="chip-input">
+            <div class="chip white">1</div>
+            <label for="branco">Fichas Brancas:</label>
+            <input type="number" id="branco" min="0" value="0" oninput="calcularTotal()">
+        </div>
+        <div class="chip-input">
+            <div class="chip green">2</div>
+            <label for="verde">Fichas Verdes:</label>
+            <input type="number" id="verde" min="0" value="0" oninput="calcularTotal()">
+        </div>
+        <div class="chip-input">
+            <div class="chip blue">3</div>
+            <label for="azul">Fichas Azuis:</label>
+            <input type="number" id="azul" min="0" value="0" oninput="calcularTotal()">
+        </div>
+        <div class="chip-input">
+            <div class="chip black">4</div>
+            <label for="preto">Fichas Pretas:</label>
+            <input type="number" id="preto" min="0" value="0" oninput="calcularTotal()">
+        </div>
+        <div class="chip-input">
+            <div class="chip red">6</div>
+            <label for="vermelho">Fichas Vermelhas:</label>
+            <input type="number" id="vermelho" min="0" value="0" oninput="calcularTotal()">
+        </div>
+        <div class="chip-input">
+            <label for="unit_value">Valor por unidade (R$):</label>
+            <input type="number" id="unit_value" min="0" step="0.01" value="0.04" oninput="calcularTotal()">
+        </div>
+        <button class="reset" onclick="resetForm()">Resetar</button>
+        <div id="resultado">Total Unidades: 0 | Total em R$: R$ 0,00</div>
+    </div>
+    <div id="hands" class="tabcontent">
+        <div id="poker-hands">
+            <img src="https://media.poker.org/prod/images/gm_medium_preview/8b243b9d652b-poker-org-hand-ranking-chart-with-icon.webp" alt="Mãos de Poker">
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(tabName) {
+        const tabs = document.querySelectorAll('.tabcontent');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+
+        const buttons = document.querySelectorAll('.tabs button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function calcularTotal() {
+        const branco = parseInt(document.getElementById('branco').value) || 0;
+        const verde = parseInt(document.getElementById('verde').value) || 0;
+        const azul = parseInt(document.getElementById('azul').value) || 0;
+        const preto = parseInt(document.getElementById('preto').value) || 0;
+        const vermelho = parseInt(document.getElementById('vermelho').value) || 0;
+        const unit_value = parseFloat(document.getElementById('unit_value').value) || 0;
+
+        const total_unidades = (branco * 1) + (verde * 2) + (azul * 3) + (preto * 4) + (vermelho * 6);
+        const total_real = total_unidades * unit_value;
+
+        document.getElementById('resultado').innerHTML = `Total Unidades: ${total_unidades} | Total em R$: ${total_real.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    }
+
+    function resetForm() {
+        document.getElementById('branco').value = 0;
+        document.getElementById('verde').value = 0;
+        document.getElementById('azul').value = 0;
+        document.getElementById('preto').value = 0;
+        document.getElementById('vermelho').value = 0;
+        document.getElementById('unit_value').value = 1.00;
+        calcularTotal();
+    }
+</script>
+</body>
+</html>
